@@ -2,7 +2,7 @@ Themey-Gen
 =================
 
 This is a theme generator and integrator for [Yii2](https://github.com/yiisoft/yii2) framework applications. It can 
-generate files an classes required to seamless integrate an HTML template with the
+generate files and classes required to seamless integrate an HTML template with the
 Yii2 Application.
 
 [![Latest Stable Version](https://poser.pugx.org/coreit/themey-gen/v/stable)](https://packagist.org/packages/coreit/themey-gen)
@@ -10,6 +10,7 @@ Yii2 Application.
 [![Latest Unstable Version](https://poser.pugx.org/coreit/themey-gen/v/unstable)](https://packagist.org/packages/coreit/themey-gen)
 [![License](https://poser.pugx.org/coreit/themey-gen/license)](https://packagist.org/packages/coreit/themey-gen)
 [![Dependency Status](https://www.versioneye.com/user/projects/585e6c304b26f6003ec144fc/badge.svg)](https://www.versioneye.com/user/projects/585e6c304b26f6003ec144fc)
+[![Build Status](https://travis-ci.org/ramaj93/themey-gen.svg?branch=master)](https://travis-ci.org/ramaj93/themey-gen)
 
 Installation
 ------------
