@@ -83,11 +83,11 @@ class Theme {
         $images = $dom->getElementsByTag("img");
 
         $asset_css = [];
-        $assets_path = $root . DIRECTORY_SEPARATOR . "web/themes" . DIRECTORY_SEPARATOR . $name;
+        $assets_path = $root . DIRECTORY_SEPARATOR . "web/themes" . DIRECTORY_SEPARATOR . $this->name;
         foreach ($links as $link) {
             $href = $link->getAttribute("href");
             if (strpos($href, "http") === FALSE) {
-                $this->assets[$name]['css'][] = $href;
+                $this->assets[$name]['css'][] = "themes/$this->name/" . $href;
                 $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
                 $base_name = basename(dirname($src_path));
                 $asset_css[] = $base_name . "/" . basename($src_path);
@@ -99,7 +99,7 @@ class Theme {
         foreach ($scripts as $script) {
             $href = $script->getAttribute("src");
             if (strpos($href, "http") === FALSE) {
-                $this->assets[$name]['js'][] = $href;
+                $this->assets[$name]['js'][] = "themes/$this->name/" . $href;
                 $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
                 $base_name = basename(dirname($src_path));
                 $asset_js[] = $base_name . "/" . basename($src_path);
@@ -130,6 +130,7 @@ EOL;
         $dom = str_replace("</head>", "<?=\$this->head();?>\n</head>", $dom);
         $dom = str_replace("</body>", "<?=\$this->endBody();?>\n</body>", $dom);
         $dom = str_replace("</html>", "</html>\n<?=\$this->endPage();?>", $dom);
+        $dom = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $dom);
         $layout_dir = $root . DIRECTORY_SEPARATOR . "views/layouts/$this->name";
         if (!file_exists($layout_dir)) {
             mkdir($layout_dir);
