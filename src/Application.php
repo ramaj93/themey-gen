@@ -26,7 +26,6 @@
 
 namespace themey;
 
-define("WORKING_DIR", getcwd());
 
 /**
  * Description of Application
@@ -35,8 +34,12 @@ define("WORKING_DIR", getcwd());
  */
 class Application extends \Symfony\Component\Console\Application {
 
+    const VERSION = "0.1.0";
+
+    public static $workingDir;
+
     public function __construct() {
-        parent::__construct("Yii2 theme generator", "0.1.0");
+        parent::__construct("Yii2 theme generator", self::VERSION);
         $this->init();
     }
 
@@ -47,3 +50,5 @@ class Application extends \Symfony\Component\Console\Application {
     }
 
 }
+
+Application::$workingDir = getcwd();

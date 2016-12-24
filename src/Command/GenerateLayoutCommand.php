@@ -55,7 +55,7 @@ class GenerateLayoutCommand extends Command {
         $layout = $input->getOption("name");
         $path = $input->getOption("path");
         $assets = $input->getOption("asset");
-        $root = WORKING_DIR;
+        $root = \themey\Application::$workingDir;
         Display::setOutput($output);
         if ($theme == FALSE) {
             return $output->writeln("Theme name is required.");

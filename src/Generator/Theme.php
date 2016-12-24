@@ -29,6 +29,7 @@ namespace themey\Generator;
 use themey\Helper\FileHelper;
 use PHPHtmlParser\Dom;
 use themey\Helper\Display;
+use themey\Application;
 
 /**
  * Description of Theme
@@ -59,12 +60,12 @@ class Theme {
             'assets',
             'gii'
         ];
-        $theme_path = WORKING_DIR . DIRECTORY_SEPARATOR . "themes" . DIRECTORY_SEPARATOR . $this->name;
+        $theme_path = Application::$workingDir . DIRECTORY_SEPARATOR . "themes" . DIRECTORY_SEPARATOR . $this->name;
         FileHelper::createFolders($dirs, $theme_path);
     }
 
     public function generateAssets($layouts = []) {
-        $asset_path = WORKING_DIR . DIRECTORY_SEPARATOR . "themes" . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . "assets";
+        $asset_path = Application::$workingDir . DIRECTORY_SEPARATOR . "themes" . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . "assets";
         $tpl_path = __DIR__ . "/../Templates/Asset.php";
         foreach ($layouts as $layout) {
             $layout_name = ucfirst($layout) . "Asset.php";
@@ -80,7 +81,7 @@ class Theme {
             'removeScripts' => FALSE,
             'preserveLineBreaks' => TRUE
         ]);
-        $root = WORKING_DIR;
+        $root = Application::$workingDir;
         $dom->loadFromFile($layout_path);
         $theme_base = dirname($layout_path);
         $scripts = $dom->getElementsByTag("script");

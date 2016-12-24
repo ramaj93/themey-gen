@@ -53,7 +53,7 @@ class GenerateThemeCommand extends \Symfony\Component\Console\Command\Command {
         $name = $input->getOption("name");
         $layout = $input->getOption("layout");
         $assets = $input->getOption("asset");
-        $root = WORKING_DIR;
+        $root = \themey\Application::$workingDir;;
         if ($path == FALSE) {
             if (file_exists($root . "/../theme/index.html")) {
                 $path = $root . "/../theme/index.html";

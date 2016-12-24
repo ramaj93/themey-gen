@@ -47,7 +47,7 @@ class GenerateAppCommand extends \Symfony\Component\Console\Command\Command {
     public function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption("path");
         if ($path == FALSE) {
-            $path = getcwd();
+            $path = \themey\Application::$workingDir;
         } else {
             if (!file_exists($path)) {
                 $output->writeln("Path $path does not exist.");
