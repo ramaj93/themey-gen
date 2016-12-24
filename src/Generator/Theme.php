@@ -28,6 +28,7 @@ namespace themey\Generator;
 
 use themey\Helper\FileHelper;
 use PHPHtmlParser\Dom;
+use themey\Helper\Display;
 
 /**
  * Description of Theme
@@ -42,9 +43,13 @@ class Theme {
     public $current_layout;
     public $assets = [];
 
-    public function __construct($name, $layout = false, $callback = false) {
+   
+    public $output;
+
+    public function __construct($name, $layout = false, $output = false) {
         $this->name = $name;
         $this->layout_path = $layout;
+        $this->output = $output;
     }
 
     public function generateStructure() {
@@ -91,7 +96,7 @@ class Theme {
                 $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
                 $base_name = basename(dirname($src_path));
                 $asset_css[] = $base_name . "/" . basename($src_path);
-                \themey\Helper\FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name);
+                FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name);
                 $link->delete();
             }
         }
@@ -99,11 +104,15 @@ class Theme {
         foreach ($scripts as $script) {
             $href = $script->getAttribute("src");
             if (strpos($href, "http") === FALSE) {
-                $this->assets[$name]['js'][] = "themes/$this->name/" . $href;
-                $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
-                $base_name = basename(dirname($src_path));
-                $asset_js[] = $base_name . "/" . basename($src_path);
-                \themey\Helper\FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name);
+                if ($href != FALSE) {
+                    $this->assets[$name]['js'][] = "themes/$this->name/" . $href;
+                    $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
+                    $base_name = basename(dirname($src_path));
+                    $asset_js[] = $base_name . "/" . basename($src_path);
+                    if (!FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name)) {
+                        Display::writeErrorLine("Error copying $src_path, check permissions or if it exists.");
+                    }
+                }
                 $script->delete();
             }
         }
@@ -117,7 +126,7 @@ class Theme {
             }
         }
         $bundle_name = ucfirst($name) . "Asset";
-        $rep = <<<EOL
+        $rep = <<<HTML
 <?php\n\n
 /* @var \$this \yii\web\View */
 use app\\themes\\$this->name\\assets\\$bundle_name;\n\n
@@ -125,7 +134,7 @@ use app\\themes\\$this->name\\assets\\$bundle_name;\n\n
                 
 \$this->beginPage()?>\n
 <html
-EOL;
+HTML;
         $dom = str_replace("<html", $rep, $dom);
         $dom = str_replace("</head>", "<?=\$this->head();?>\n</head>", $dom);
         $dom = str_replace("</body>", "<?=\$this->endBody();?>\n</body>", $dom);

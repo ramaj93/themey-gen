@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2016 Ramadan Juma.
@@ -24,31 +24,34 @@
  * THE SOFTWARE.
  */
 
-/* @var $this themey\Generator\Theme */
-?>
+namespace themey\Helper;
 
-<?="<?php\n"?>
+/**
+ * Description of Display
+ *
+ * @author Ramadan Juma
+ */
+class Display {
 
-namespace app\themes\<?=$this->name?>\assets;
+    /** @var \Symfony\Component\Console\Output\OutputInterface  */
+    private static $_output;
 
-use yii\web\AssetBundle;
+    public static function setOutput($output) {
+        if (self::$_output == NULL) {
+            self::$_output = $output;
+        }
+    }
 
-class <?= ucfirst($this->current_layout)?>Asset extends AssetBundle{
+    static function writeErrorLine($line) {
+        self::$_output->writeln("<fg=red>$line</>");
+    }
 
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
-    public $css = [
-    <?php if(array_key_exists($this->current_layout,$this->assets))
-        foreach ($this->assets[$this->current_layout]['css'] as $css):?>
-    '<?=$css?>',
-    <?php endforeach;?>
-    ];
-    
-    public $js = [
-        <?php if(array_key_exists($this->current_layout,$this->assets))
-            foreach ($this->assets[$this->current_layout]['js'] as $js):?>
-        '<?=$js?>',
-        <?php endforeach;?>
-    ];
-    
+    static function writeSuccessLine($line) {
+        self::$_output->writeln("<fg=green>$line</>");
+    }
+
+    static function writeWarningLine($line) {
+        self::$_output->writeln("<fg=yellow>$line</>");
+    }
+
 }

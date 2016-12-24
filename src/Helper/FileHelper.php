@@ -44,7 +44,10 @@ class FileHelper {
             }
             $dest = $dest . DIRECTORY_SEPARATOR . basename($src);
         }
-        return copy($src, $dest);
+        if (file_exists($src)) {
+            return copy($src, $dest);
+        }
+        return FALSE;
     }
 
     public static function copyDirectory($src, $dst, $options = []) {
@@ -93,7 +96,7 @@ class FileHelper {
         closedir($handle);
     }
 
-    static function renderFile($_viewFile_, $_data_ = false,$_return_ = true) {
+    static function renderFile($_viewFile_, $_data_ = false, $_return_ = true) {
         if (is_array($_data_))
             extract($_data_, EXTR_PREFIX_SAME, 'data');
         else

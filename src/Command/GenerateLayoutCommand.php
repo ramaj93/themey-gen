@@ -28,6 +28,10 @@ namespace themey\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use themey\Generator\Theme;
+use themey\Helper\Display;
 
 /**
  * Description of GenerateLayoutCommand
@@ -38,10 +42,46 @@ class GenerateLayoutCommand extends Command {
 
     public function configure() {
         $this->setName("generate:layout")
-                ->setHelp("Generate theme layout")
-                ->setDescription("Generate theme layout");
-        $this->addOption("path", 'p', InputOption::VALUE_OPTIONAL, "Path to layout template");
-        $this->addOption("name", 't', InputOption::VALUE_OPTIONAL, "Layout Name");
+                ->setHelp("Generate theme layout,theme name and layout name are required.")
+                ->setDescription("Generate theme layout")
+                ->addOption("theme", 't', InputOption::VALUE_REQUIRED, "Theme Name")
+                ->addOption("name", 'l', InputOption::VALUE_REQUIRED, "Layout Name")
+                ->addOption("asset","a", InputOption::VALUE_IS_ARRAY|InputOption::VALUE_OPTIONAL,"Asset bundle used by layout",[])
+                ->addOption("path", 'p', InputOption::VALUE_OPTIONAL, "Path to layout template");
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $theme = $input->getOption("theme");
+        $layout = $input->getOption("name");
+        $path = $input->getOption("path");
+        $assets = $input->getOption("asset");
+        $root = WORKING_DIR;
+        Display::setOutput($output);
+        if ($theme == FALSE) {
+            return $output->writeln("Theme name is required.");
+        }
+
+        if ($layout == FALSE) {
+            return $output->writeln("Layout name is required.");
+        }
+        if ($path == FALSE) {
+            if (file_exists($root . "/../theme/$layout.html")) {
+                $path = $root . "/../theme/index.html";
+            } elseif (file_exists($root . "/../themes/$theme/$layout.html")) {
+                $path = $root . "/../themes/$theme/$layout.html";
+            }
+        }
+
+        if (!file_exists($path)) {
+            return $output->writeln("Theme layout file $path does not exist, layout will not be generated.");
+        }
+        $gen = new Theme($theme,false,$output);
+        $gen->current_layout = $layout;
+        $gen->generateLayout($layout, $path);      
+        if(count($assets) == 0){
+            $assets[] = $layout;
+        }
+        $gen->generateAssets($assets);
     }
 
 }
