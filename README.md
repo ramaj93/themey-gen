@@ -50,8 +50,8 @@ Resources
 Credits
 -------
 
-*`Symphony\Console` is a PHP Console application framework. Find sources and license at https://github.com/symfony/symfony
-*`paquettg/php-html-parser` An HTML DOM parser. It allows you to manipulate HTML. Find tags on an HTML page with selectors just like jQuery.
+* `Symphony\Console` is a PHP Console application framework. Find sources and license at https://github.com/symfony/symfony
+* `paquettg/php-html-parser` An HTML DOM parser. It allows you to manipulate HTML. Find tags on an HTML page with selectors just like jQuery.
 you can find it at https://github.com/paquettg/php-html-parser
 
 License
