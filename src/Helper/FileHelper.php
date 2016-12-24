@@ -15,13 +15,20 @@ namespace themey\Helper;
  */
 class FileHelper {
 
-    public static function createFolders($dirs = [], $context = FALSE) {
+    public static function createFolders($dirs = [], $context = FALSE, $call_back = false) {
         foreach ($dirs as $dir => $child) {
-            chdir($context);
+            if (!file_exists($context)) {
+                mkdir($context, 0777, TRUE);
+            }
+            if ($context != FALSE) {
+                chdir($context);
+            }
             if (!is_numeric($dir)) {
-                mkdir($dir, 0777, true);
+                if (!file_exists($dir))
+                    mkdir($dir, 0777, true);
             } else {
-                mkdir($child);
+                if (!file_exists($child))
+                    mkdir($child);
             }
             if (is_array($child)) {
                 self::createFolders($child, realpath($dir));

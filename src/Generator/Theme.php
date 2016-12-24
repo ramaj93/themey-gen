@@ -27,6 +27,7 @@
 namespace themey\Generator;
 
 use themey\Helper\FileHelper;
+use PHPHtmlParser\Dom;
 
 /**
  * Description of Theme
@@ -37,8 +38,9 @@ class Theme {
 
     public $name;
     public $layout_path;
+    public $callback;
 
-    public function __construct($name, $layout = false) {
+    public function __construct($name, $layout = false, $callback = false) {
         $this->name = $name;
         $this->layout_path = $layout;
     }
@@ -60,7 +62,6 @@ class Theme {
 
     public function generateLayout($name, $layout_path) {
         $dom = new Dom;
-        $dom->addSelfClosingTag(['script', 'meta']);
         $dom->setOptions([
             'removeScripts' => FALSE,
             'preserveLineBreaks' => TRUE
@@ -104,20 +105,25 @@ class Theme {
                 \themey\Helper\FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name);
             }
         }
+        $bundle_name = ucfirst($name)."Asset";
         $rep = <<<EOL
 <?php\n\n
 /* @var \$this \yii\web\View */
-use app\\themes\\$this->name\\$nameAsset;\n\n
-\$bundle = AppAsset::register(\$this);\n
+use app\\themes\\$this->name\\assets\\$bundle_name;\n\n
+\$bundle = $bundle_name::register(\$this);\n\n
                 
 \$this->beginPage()?>\n
-              <html
+<html
 EOL;
         $dom = str_replace("<html", $rep, $dom);
         $dom = str_replace("</head>", "<?=\$this->head();?>\n</head>", $dom);
         $dom = str_replace("</body>", "<?=\$this->endBody();?>\n</body>", $dom);
         $dom = str_replace("</html>", "</html>\n<?=\$this->endPage();?>", $dom);
-        file_put_contents($root . DIRECTORY_SEPARATOR . "views/layouts/$this->name/$name.php", $dom);
+        $layout_dir = $root . DIRECTORY_SEPARATOR . "views/layouts/$this->name";
+        if (!file_exists($layout_dir)) {
+            mkdir($layout_dir);
+        }
+        file_put_contents($layout_dir . DIRECTORY_SEPARATOR . "$name.php", $dom);
     }
 
 }

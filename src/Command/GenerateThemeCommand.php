@@ -67,7 +67,7 @@ class GenerateThemeCommand extends \Symfony\Component\Console\Command\Command {
         $theme->generateStructure();
         $theme->generateAssets();
         if ($path != FALSE) {
-            $theme->generateLayout("app", $path);
+            $theme->generateLayout("main", $path);
         }
     }
 
