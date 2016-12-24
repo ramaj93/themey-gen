@@ -1,0 +1,20 @@
+{
+    "name": "coreit/themey-gen",
+    "description": "Theme generator for yii2",
+    "authors": [
+        {
+            "name": "Ramadan Juma",
+            "email": "ramaj93@yahoo.com"
+        }
+    ],   
+    "autoload": {
+        "psr-4": {
+            "themey\\": "src/"
+        }
+    },
+    "require": {
+        "symfony/finder": "^3.2",
+        "symfony/console": "^3.2",
+        "paquettg/php-html-parser": "^1.7"
+    }
+}
