@@ -36,7 +36,7 @@ define("WORKING_DIR", getcwd());
 class Application extends \Symfony\Component\Console\Application {
 
     public function __construct() {
-        parent::__construct("Themey Tool", "0.0.1");
+        parent::__construct("Yii2 theme generator", "0.1.0");
         $this->init();
     }
 
