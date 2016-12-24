@@ -24,8 +24,11 @@ to the require section of your application's `composer.json` file.
 
 Usage
 -----
-The tool is accessible through terminal, to access it globally you can add src/bin into your $PATH
+The tool is accessible through terminal, to access it globally you can add `/bin` into your $PATH
 You can then run it in command line using `themey`
+
+Before running the command the current directory should be that of the required application either `frontend` or `backend` for the 
+advanced Yii2 template or root directory of the basic template.
 
 Contributing
 ------------
@@ -40,11 +43,11 @@ Resources
 Credits
 -------
 
-`Symphony\Console` is a PHP Console application framework. Find sources and license at https://github.com/symfony/symfony
-`paquettg/php-html-parser` An HTML DOM parser. It allows you to manipulate HTML. Find tags on an HTML page with selectors just like jQuery.
+*`Symphony\Console` is a PHP Console application framework. Find sources and license at https://github.com/symfony/symfony
+*`paquettg/php-html-parser` An HTML DOM parser. It allows you to manipulate HTML. Find tags on an HTML page with selectors just like jQuery.
 you can find it at https://github.com/paquettg/php-html-parser
 
 License
 -------
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
