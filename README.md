@@ -5,6 +5,12 @@ This is a theme generator and integrator for [Yii2](https://github.com/yiisoft/y
 generate files an classes required to seamless integrate an HTML template with the
 Yii2 Application.
 
+[![Latest Stable Version](https://poser.pugx.org/coreit/themey-gen/v/stable)](https://packagist.org/packages/coreit/themey-gen)
+[![Total Downloads](https://poser.pugx.org/coreit/themey-gen/downloads)](https://packagist.org/packages/coreit/themey-gen)
+[![Latest Unstable Version](https://poser.pugx.org/coreit/themey-gen/v/unstable)](https://packagist.org/packages/coreit/themey-gen)
+[![License](https://poser.pugx.org/coreit/themey-gen/license)](https://packagist.org/packages/coreit/themey-gen)
+[![Dependency Status](https://www.versioneye.com/user/projects/585e6c304b26f6003ec144fc/badge.svg)](https://www.versioneye.com/user/projects/585e6c304b26f6003ec144fc)
+
 Installation
 ------------
 The preferred way to install this tool through [composer](http://getcomposer.org/download/).

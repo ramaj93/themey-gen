@@ -15,5 +15,8 @@
     "require": {
         "symfony/console": "^3.2",
         "paquettg/php-html-parser": "^1.7"
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.2"
     }
 }
