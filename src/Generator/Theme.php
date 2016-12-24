@@ -39,6 +39,8 @@ class Theme {
     public $name;
     public $layout_path;
     public $callback;
+    public $current_layout;
+    public $assets = [];
 
     public function __construct($name, $layout = false, $callback = false) {
         $this->name = $name;
@@ -56,8 +58,15 @@ class Theme {
         FileHelper::createFolders($dirs, $theme_path);
     }
 
-    public function generateAssets() {
-        
+    public function generateAssets($layouts = []) {
+        $asset_path = WORKING_DIR . DIRECTORY_SEPARATOR . "themes" . DIRECTORY_SEPARATOR . $this->name . DIRECTORY_SEPARATOR . "assets";
+        $tpl_path = __DIR__ . "/../Templates/Asset.php";
+        foreach ($layouts as $layout) {
+            $layout_name = ucfirst($layout) . "Asset.php";
+            $this->current_layout = $layout;
+            $contents = $this->renderFile($tpl_path);
+            file_put_contents($asset_path . DIRECTORY_SEPARATOR . $layout_name, $contents);
+        }
     }
 
     public function generateLayout($name, $layout_path) {
@@ -78,6 +87,7 @@ class Theme {
         foreach ($links as $link) {
             $href = $link->getAttribute("href");
             if (strpos($href, "http") === FALSE) {
+                $this->assets[$name]['css'][] = $href;
                 $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
                 $base_name = basename(dirname($src_path));
                 $asset_css[] = $base_name . "/" . basename($src_path);
@@ -89,6 +99,7 @@ class Theme {
         foreach ($scripts as $script) {
             $href = $script->getAttribute("src");
             if (strpos($href, "http") === FALSE) {
+                $this->assets[$name]['js'][] = $href;
                 $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
                 $base_name = basename(dirname($src_path));
                 $asset_js[] = $base_name . "/" . basename($src_path);
@@ -105,7 +116,7 @@ class Theme {
                 \themey\Helper\FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name);
             }
         }
-        $bundle_name = ucfirst($name)."Asset";
+        $bundle_name = ucfirst($name) . "Asset";
         $rep = <<<EOL
 <?php\n\n
 /* @var \$this \yii\web\View */
@@ -124,6 +135,18 @@ EOL;
             mkdir($layout_dir);
         }
         file_put_contents($layout_dir . DIRECTORY_SEPARATOR . "$name.php", $dom);
+    }
+
+    public function renderFile($view, $model = false) {
+        if ($model == FALSE) {
+            $model = $this;
+        }
+        ob_start();
+        ob_implicit_flush(false);
+        extract([$model], EXTR_OVERWRITE);
+        require($view);
+
+        return ob_get_clean();
     }
 
 }

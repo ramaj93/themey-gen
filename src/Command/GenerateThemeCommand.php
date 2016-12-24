@@ -44,6 +44,7 @@ class GenerateThemeCommand extends \Symfony\Component\Console\Command\Command {
                 ->setDescription("Generate theme template");
         $this->addOption("path", 'p', InputOption::VALUE_OPTIONAL, "Path to default theme layout template");
         $this->addOption("name", 't', InputOption::VALUE_OPTIONAL, "Theme Name");
+        $this->addOption("asset", "a", InputOption::VALUE_OPTIONAL, "Generate Assets only");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -60,14 +61,14 @@ class GenerateThemeCommand extends \Symfony\Component\Console\Command\Command {
             $path = FALSE;
         }
         if ($name == FALSE) {
-            $output->writeln("Theme name not specified default 'basic' name will be used.");
+            $output->writeln("Theme name not specified default name 'basic' will be used.");
             $name = "basic";
         }
         $theme = new \themey\Generator\Theme($name);
         $theme->generateStructure();
-        $theme->generateAssets();
         if ($path != FALSE) {
             $theme->generateLayout("main", $path);
+            $theme->generateAssets(['main']);
         }
     }
 

@@ -24,22 +24,29 @@
  * THE SOFTWARE.
  */
 
+/* @var $this themey\Generator\Theme */
 ?>
 
 <?="<?php\n"?>
 
-namespace app\themes\<?=$data['theme']?>\assets;
+namespace app\themes\<?=$this->name?>\assets;
 
 use yii\web\AssetBundle;
 
-class <?=$data['class']?> extends AssetBundle{
+class <?= ucfirst($this->current_layout)?>Asset extends AssetBundle{
 
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+    <?php foreach ($this->assets[$this->current_layout]['css'] as $css):?>
+    '<?=$css?>',
+    <?php endforeach;?>
     ];
     
     public $js = [
+        <?php foreach ($this->assets[$this->current_layout]['js'] as $js):?>
+        '<?=$js?>',
+        <?php endforeach;?>
     ];
     
 }

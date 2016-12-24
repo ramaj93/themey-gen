@@ -93,4 +93,18 @@ class FileHelper {
         closedir($handle);
     }
 
+    static function renderFile($_viewFile_, $_data_ = false,$_return_ = true) {
+        if (is_array($_data_))
+            extract($_data_, EXTR_PREFIX_SAME, 'data');
+        else
+            $data = $_data_;
+        if ($_return_) {
+            ob_start();
+            ob_implicit_flush(false);
+            require($_viewFile_);
+            return ob_get_clean();
+        } else
+            require($_viewFile_);
+    }
+
 }
