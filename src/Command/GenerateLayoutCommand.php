@@ -46,7 +46,7 @@ class GenerateLayoutCommand extends Command {
                 ->setDescription("Generate theme layout")
                 ->addOption("theme", 't', InputOption::VALUE_REQUIRED, "Theme Name")
                 ->addOption("name", 'l', InputOption::VALUE_REQUIRED, "Layout Name")
-                ->addOption("asset","a", InputOption::VALUE_IS_ARRAY|InputOption::VALUE_OPTIONAL,"Asset bundle used by layout",[])
+                ->addOption("asset", "a", InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, "Asset bundle used by layout", [])
                 ->addOption("path", 'p', InputOption::VALUE_OPTIONAL, "Path to layout template");
     }
 
@@ -66,7 +66,7 @@ class GenerateLayoutCommand extends Command {
         }
         if ($path == FALSE) {
             if (file_exists($root . "/../theme/$layout.html")) {
-                $path = $root . "/../theme/index.html";
+                $path = $root . "/../theme/$layout.html";
             } elseif (file_exists($root . "/../themes/$theme/$layout.html")) {
                 $path = $root . "/../themes/$theme/$layout.html";
             }
@@ -75,12 +75,12 @@ class GenerateLayoutCommand extends Command {
         if (!file_exists($path)) {
             return $output->writeln("Theme layout file $path does not exist, layout will not be generated.");
         }
-        $gen = new Theme($theme,false,$output);
-        $gen->current_layout = $layout;
-        $gen->generateLayout($layout, $path);      
-        if(count($assets) == 0){
+        $gen = new Theme($theme, false, $output);
+        if (count($assets) == 0) {
             $assets[] = $layout;
         }
+        $gen->generateLayout($layout, $path,FALSE,$assets);
+
         $gen->generateAssets($assets);
     }
 

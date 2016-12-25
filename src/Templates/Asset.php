@@ -26,7 +26,6 @@
 
 /* @var $this themey\Generator\Theme */
 ?>
-
 <?="<?php\n"?>
 
 namespace app\themes\<?=$this->name?>\assets;

@@ -53,5 +53,9 @@ class Display {
     static function writeWarningLine($line) {
         self::$_output->writeln("<fg=yellow>$line</>");
     }
+    
+    static function writeInfoLine($line){
+        self::$_output->writeln("<fg=blue>$line</>");
+    }
 
 }

@@ -33,6 +33,10 @@ Usage
 -----
 The tool is accessible through terminal, to access it globally you can add `/bin` into your $PATH
 You can then run it in command line using `themey`
+To generate Yii application structure you can run `themey generate:app`
+To generate a theme template run `themey:generate:theme -t theme-name -p path-to-the-theme`
+To generate a layout run `themey:generate:layout -t theme-name -l layout-name`
+For more commands and help run `themey --help`
 
 Before running the command the current directory should be that of the required application either `frontend` or `backend` for the 
 advanced Yii2 template or root directory of the basic template.

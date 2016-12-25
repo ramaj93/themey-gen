@@ -43,8 +43,6 @@ class Theme {
     public $callback;
     public $current_layout;
     public $assets = [];
-
-   
     public $output;
 
     public function __construct($name, $layout = false, $output = false) {
@@ -75,7 +73,7 @@ class Theme {
         }
     }
 
-    public function generateLayout($name, $layout_path) {
+    public function generateLayout($name, $layout_path,$default_asset = false, $assets = []) {
         $dom = new Dom;
         $dom->setOptions([
             'removeScripts' => FALSE,
@@ -87,17 +85,24 @@ class Theme {
         $scripts = $dom->getElementsByTag("script");
         $links = $dom->getElementsByTag("link");
         $images = $dom->getElementsByTag("img");
+        
+        if ($default_asset == FALSE && count($assets)>0) {
+            $default_asset = $assets[0];
+        }
+        if($default_asset == FALSE){
+            $default_asset = "app";
+        }
 
         $asset_css = [];
         $assets_path = $root . DIRECTORY_SEPARATOR . "web/themes" . DIRECTORY_SEPARATOR . $this->name;
         foreach ($links as $link) {
             $href = $link->getAttribute("href");
             if (strpos($href, "http") === FALSE) {
-                $this->assets[$name]['css'][] = "themes/$this->name/" . $href;
+                $this->assets[$default_asset]['css'][] = "themes/$this->name/" . $href;
                 $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
-                $base_name = basename(dirname($src_path));
-                $asset_css[] = $base_name . "/" . basename($src_path);
-                FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name);
+                //$asset_css[] = $base_name . "/" . basename($src_path);
+                Display::writeInfoLine("copying $src_path to $assets_path/$href");
+                FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $href);
                 $link->delete();
             }
         }
@@ -106,10 +111,11 @@ class Theme {
             $href = $script->getAttribute("src");
             if (strpos($href, "http") === FALSE) {
                 if ($href != FALSE) {
-                    $this->assets[$name]['js'][] = "themes/$this->name/" . $href;
+                    $this->assets[$default_asset]['js'][] = "themes/$this->name/" . $href;
                     $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
-                    $base_name = basename(dirname($src_path));
-                    $asset_js[] = $base_name . "/" . basename($src_path);
+                    $base_name = $href;
+                    //$asset_js[] = $base_name . "/" . basename($src_path);
+                    Display::writeInfoLine("copying $src_path to $assets_path/$href");
                     if (!FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name)) {
                         Display::writeErrorLine("Error copying $src_path, check permissions or if it exists.");
                     }
@@ -122,22 +128,28 @@ class Theme {
             $href = $img->getAttribute("src");
             if (strpos($href, "http") === FALSE) {
                 $src_path = $theme_base . DIRECTORY_SEPARATOR . $href;
-                $base_name = basename(dirname($src_path));
+                $base_name = $href;
                 \themey\Helper\FileHelper::copyFile($src_path, $assets_path . DIRECTORY_SEPARATOR . $base_name);
             }
         }
-        $bundle_name = ucfirst($name) . "Asset";
+        $str = "use yii\\helpers\\Html;\n";
+        foreach ($assets as $asset) {
+            $bundle_name = ucfirst($asset) . "Asset";
+            $str .= "use app\\themes\\$this->name\\assets\\$bundle_name;\n\n";
+            $str .= "$bundle_name::register(\$this);\n\n";
+        }
+
         $rep = <<<HTML
 <?php\n\n
-/* @var \$this \yii\web\View */
-use app\\themes\\$this->name\\assets\\$bundle_name;\n\n
-\$bundle = $bundle_name::register(\$this);\n\n
+/* @var \$this \yii\web\View */\n
+$str
                 
-\$this->beginPage()?>\n
+\$this->beginPage();?>\n
 <html
 HTML;
+        //$rep = str_replace("{assets}", $str, $rep);
         $dom = str_replace("<html", $rep, $dom);
-        $dom = str_replace("</head>", "<?=\$this->head();?>\n</head>", $dom);
+        $dom = str_replace("</head>", "<?= Html::csrfMetaTags(); ?>\n<?=\$this->head();?>\n</head>", $dom);
         $dom = str_replace("</body>", "<?=\$this->endBody();?>\n</body>", $dom);
         $dom = str_replace("</html>", "</html>\n<?=\$this->endPage();?>", $dom);
         $dom = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $dom);

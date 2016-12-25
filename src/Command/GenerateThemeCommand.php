@@ -49,6 +49,7 @@ class GenerateThemeCommand extends \Symfony\Component\Console\Command\Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        \themey\Helper\Display::setOutput($output);
         $path = $input->getOption("path");
         $name = $input->getOption("name");
         $layout = $input->getOption("layout");
@@ -79,7 +80,7 @@ class GenerateThemeCommand extends \Symfony\Component\Console\Command\Command {
         $theme = new \themey\Generator\Theme($name);
         $theme->generateStructure();
         if ($path != FALSE) {
-            $theme->generateLayout($layout, $path);
+            $theme->generateLayout($layout, $path,'app',$assets);
             $theme->generateAssets($assets);
         }
     }

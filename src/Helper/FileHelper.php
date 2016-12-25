@@ -37,13 +37,30 @@ class FileHelper {
         return TRUE;
     }
 
+    public static function normalize($path) {
+        if (PHP_OS == "Linux") {
+            return str_replace("\\", "/", $path);
+        } else {
+            return str_replace("/", "\\", $path);
+        }
+    }
+
     public static function copyFile($src, $dest) {
-        if (!is_file($dest)) {
+        $dest = self::normalize($dest);
+        if (is_dir($dest)) {
+            exit;
             if (!file_exists($dest)) {
+                exit;
                 mkdir($dest, 0777, TRUE);
             }
             $dest = $dest . DIRECTORY_SEPARATOR . basename($src);
+        } else {
+            $dir = dirname($dest);
+            if (!file_exists($dest)) {
+                mkdir($dir, 0777, true);
+            }
         }
+
         if (file_exists($src)) {
             return copy($src, $dest);
         }
