@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * The MIT License
  *
  * Copyright 2016 Ramadan Juma.
@@ -23,7 +23,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 
 namespace themey\Command;
 
@@ -52,6 +51,9 @@ class GenerateAppCommand extends \Symfony\Component\Console\Command\Command {
             if (!file_exists($path)) {
                 $output->writeln("Path $path does not exist.");
             }
+        }
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
         }
         $context = realpath($path);
         $dirs = [

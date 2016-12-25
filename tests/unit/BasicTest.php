@@ -12,7 +12,24 @@ class BasicTest extends \Codeception\TestCase\Test {
     protected $tester;
 
     protected function _before() {
-        
+        if (file_exists(__DIR__ . "/../_output/app")) {
+            $this->rrmdir(__DIR__ . "/../_output/app");
+        }
+    }
+
+    function rrmdir($dir) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir . "/" . $object))
+                        $this->rrmdir($dir . "/" . $object);
+                    else
+                        unlink($dir . "/" . $object);
+                }
+            }
+            rmdir($dir);
+        }
     }
 
     protected function _after() {
